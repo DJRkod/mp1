@@ -1,0 +1,110 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cue-bounce {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+
+  50% {
+    transform: translate(-50%, 10px);
+  }
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding: $nav-h-large space(4) space(8);
+  text-align: center;
+
+  // The content is centered by the layout, not by fixed offsets, so it stays
+  // vertically centered at any hero height.
+  @include center;
+
+  // Fixed-position background image: the page scrolls over it.
+  background-color: color('bg');
+  background-image: url('../assets/hero-grid.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  // Scrim keeps the text readable over the pattern.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, color('scrim') 0%, rgba(color('bg'), 0.35) 70%);
+  }
+
+  // The animation lives on this wrapper, not on .hero: a transform on the
+  // element carrying a fixed background would make the background scroll.
+  &__content {
+    position: relative;
+    max-width: 46rem;
+    animation: fade-up 900ms ease both;
+  }
+
+  &__eyebrow {
+    @include label;
+    font-size: type('sm');
+  }
+
+  &__title {
+    margin-top: space(3);
+    font-size: type('xxl');
+    letter-spacing: -0.02em;
+  }
+
+  &__tagline {
+    margin: space(4) auto space(5);
+    max-width: 36rem;
+    font-size: type('lg');
+    color: color('text-muted');
+  }
+
+  &__cue {
+    position: absolute;
+    left: 50%;
+    bottom: space(5);
+    width: 44px;
+    height: 44px;
+    border: 1px solid color('border');
+    border-radius: 50%;
+    color: color('accent');
+    animation: cue-bounce 1.8s ease-in-out infinite;
+
+    @include center;
+
+    &:hover {
+      border-color: color('accent');
+      color: color('accent');
+    }
+  }
+
+  // Short landscape windows (1280x720, 1366x768): tighten so nothing clips.
+  @media (max-height: 800px) {
+    padding-bottom: space(7);
+
+    &__tagline {
+      margin-block: space(3) space(4);
+    }
+
+    &__cue {
+      bottom: space(3);
+    }
+  }
+}

@@ -1,0 +1,120 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// Arrows sit in their own side columns, so they are vertically centered beside
+// the slides and can never cover a slide's text or its Details button.
+.carousel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: space(3);
+
+  &__viewport {
+    overflow: hidden;
+    border-radius: $radius;
+  }
+
+  &__track {
+    display: flex;
+    transition: transform 400ms ease;
+  }
+
+  &__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  &__arrow {
+    width: 52px;
+    height: 52px;
+    border: 1px solid color('border');
+    border-radius: 50%;
+    background-color: color('surface');
+    color: color('text');
+    font-size: 1.125rem;
+    transition: background-color $transition, border-color $transition, color $transition,
+      transform $transition;
+
+    @include center;
+    @include focus-ring;
+
+    &:hover {
+      border-color: color('accent');
+      background-color: color('accent');
+      color: color('bg');
+      transform: scale(1.08);
+    }
+  }
+
+  &__status {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-family: font('mono');
+    font-size: type('sm');
+    color: color('text-muted');
+  }
+
+  @include below($bp-narrow) {
+    gap: space(2);
+
+    &__arrow {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+
+.project-card {
+  @include card;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: space(5);
+  height: 100%;
+  padding: space(5);
+
+  &__visual {
+    width: 100%;
+    height: auto;
+    border-radius: $radius;
+  }
+
+  &__body {
+    display: grid;
+    justify-items: start;
+    gap: space(3);
+  }
+
+  &__kind {
+    @include label;
+  }
+
+  &__title {
+    font-size: type('xl');
+  }
+
+  &__summary {
+    color: color('text-muted');
+  }
+
+  // Narrower windows: stack the visual over the text and center it.
+  @include below($bp-medium) {
+    grid-template-columns: 1fr;
+    gap: space(4);
+    padding: space(4);
+    text-align: center;
+
+    &__visual {
+      max-width: 420px;
+      margin-inline: auto;
+    }
+
+    &__body {
+      justify-items: center;
+    }
+
+    .tag-list {
+      justify-content: center;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// The last stripe is deliberately shorter than the window. The position
+// indicator reaches it through the bottom-of-page rule in js/navbar.js.
+.footer {
+  padding-block: space(8) space(6);
+  border-top: 1px solid color('border');
+  background-color: color('bg');
+  text-align: center;
+  scroll-margin-top: $nav-h-small;
+
+  &__note {
+    margin-top: space(6);
+    font-family: font('mono');
+    font-size: type('xs');
+    color: color('text-muted');
+  }
+}
+
+.social {
+  display: flex;
+  justify-content: center;
+  gap: space(4);
+
+  &__link {
+    width: 64px;
+    height: 64px;
+    border: 1px solid color('border');
+    border-radius: 50%;
+    background-color: color('surface');
+    color: color('text');
+    font-size: 1.625rem;
+    transition: background-color $transition, border-color $transition, color $transition,
+      transform $transition;
+
+    @include center;
+
+    &:hover {
+      border-color: color('accent');
+      background-color: color('accent');
+      color: color('bg');
+      transform: translateY(-4px);
+    }
+  }
+}

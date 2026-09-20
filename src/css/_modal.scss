@@ -1,0 +1,141 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modal-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes backdrop-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+// Native <dialog>: the browser supplies the focus trap, the inert page behind,
+// and focus return. These rules add the look and the open/close motion.
+.modal {
+  width: calc(100% - #{space(5)});
+  max-width: 640px;
+  // Capped to the window so tall content scrolls inside the panel instead of
+  // running off a 720px-tall screen.
+  max-height: calc(100vh - #{space(6)});
+  padding: 0;
+  border: 1px solid color('border');
+  border-radius: $radius;
+  background-color: color('surface');
+  color: color('text');
+  box-shadow: 0 30px 80px rgba(color('black'), 0.6);
+  overflow: hidden;
+
+  &[open] {
+    display: flex;
+    animation: modal-in 220ms ease both;
+  }
+
+  &::backdrop {
+    background-color: color('backdrop');
+    backdrop-filter: blur(3px);
+    animation: backdrop-in 220ms ease both;
+  }
+
+  &.is-closing {
+    animation: modal-out 180ms ease both;
+
+    &::backdrop {
+      animation: backdrop-out 180ms ease both;
+    }
+  }
+
+  &__panel {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: space(3);
+    width: 100%;
+    padding: space(6) space(5) space(5);
+    overflow-y: auto;
+  }
+
+  &__close {
+    position: absolute;
+    top: space(3);
+    right: space(3);
+    width: 40px;
+    height: 40px;
+    border: 1px solid color('border');
+    border-radius: 50%;
+    background-color: transparent;
+    color: color('text-muted');
+    transition: border-color $transition, color $transition, transform $transition;
+
+    @include center;
+    @include focus-ring;
+
+    &:hover {
+      border-color: color('accent');
+      color: color('accent');
+      transform: rotate(90deg);
+    }
+  }
+
+  &__kind {
+    @include label;
+  }
+
+  &__title {
+    font-size: type('xl');
+  }
+
+  &__list {
+    display: grid;
+    gap: space(2);
+    color: color('text-muted');
+
+    li {
+      position: relative;
+      padding-left: space(4);
+
+      &::before {
+        content: '>';
+        position: absolute;
+        left: 0;
+        font-family: font('mono');
+        color: color('accent');
+      }
+    }
+  }
+}

@@ -1,0 +1,133 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+.stripe {
+  @include stripe;
+
+  // Fallback landing offset for plain anchor jumps; js/scroll.js computes the
+  // same offset itself when it animates.
+  scroll-margin-top: $nav-h-small;
+
+  &--tinted {
+    @include stripe($tinted: true);
+    border-block: 1px solid color('border');
+  }
+}
+
+// About: photo beside bio on wide windows, stacked and centered below 900px.
+.about {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  align-items: center;
+  gap: space(7);
+
+  &__photo {
+    width: 100%;
+    height: auto;
+    border: 1px solid color('border');
+    border-radius: $radius;
+    box-shadow: 16px 16px 0 color('accent-soft');
+  }
+
+  &__bio {
+    display: grid;
+    gap: space(3);
+  }
+
+  &__facts {
+    display: grid;
+    gap: space(2);
+    margin-top: space(2);
+    font-family: font('mono');
+    font-size: type('sm');
+    color: color('text-muted');
+
+    i {
+      width: 1.5em;
+      color: color('accent');
+    }
+  }
+
+  @include below($bp-medium) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: space(6);
+    text-align: center;
+
+    &__photo {
+      max-width: 260px;
+    }
+
+    &__bio {
+      max-width: 40rem;
+    }
+
+    &__facts {
+      justify-items: center;
+    }
+  }
+}
+
+// Skills: three columns all the way down to the 768-wide graded size.
+.skills {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: space(4);
+
+  @include below($bp-narrow) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.skill-card {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: space(3);
+  padding: space(5) space(4);
+  text-align: center;
+  transition: transform $transition, border-color $transition;
+
+  &:hover {
+    transform: translateY(-6px);
+    border-color: color('accent');
+  }
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: color('accent-soft');
+    color: color('accent');
+    font-size: 1.5rem;
+
+    @include center;
+  }
+
+  &__title {
+    font-size: type('lg');
+  }
+
+  &__text {
+    color: color('text-muted');
+    font-size: type('sm');
+  }
+
+  .tag-list {
+    justify-content: center;
+    margin-top: auto;
+  }
+}
+
+.reel {
+  width: 100%;
+  max-width: 880px;
+  height: auto;
+  margin-inline: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid color('border');
+  border-radius: $radius;
+  background-color: color('black');
+  box-shadow: 0 24px 60px rgba(color('black'), 0.45);
+}

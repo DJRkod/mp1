@@ -1,0 +1,138 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+.skip-link {
+  position: fixed;
+  top: space(2);
+  left: space(2);
+  z-index: 200;
+  padding: space(2) space(3);
+  border-radius: $radius;
+  background-color: color('accent');
+  color: color('bg');
+  font-family: font('mono');
+  transform: translateY(-200%);
+  transition: transform $transition;
+
+  &:focus {
+    transform: translateY(0);
+    color: color('bg');
+  }
+}
+
+// Fixed rather than sticky: the height change below never alters the height
+// of the document, so the shrink cannot oscillate around its threshold.
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  height: $nav-h-large;
+  border-bottom: 1px solid transparent;
+  background-color: transparent;
+  transition: height $transition, background-color $transition, border-color $transition,
+    box-shadow $transition;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: space(3);
+  }
+
+  &__logo {
+    font-family: font('mono');
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: color('text');
+    transition: font-size $transition, color $transition;
+
+    span {
+      color: color('accent');
+    }
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: space(1);
+    white-space: nowrap;
+  }
+
+  &__link {
+    position: relative;
+    display: block;
+    padding: space(2) space(3);
+    font-family: font('mono');
+    font-size: 1.0625rem;
+    color: color('text-muted');
+    transition: font-size $transition, color $transition, padding $transition;
+
+    // Position indicator: an underline that grows in under the current item.
+    &::after {
+      content: '';
+      position: absolute;
+      left: space(3);
+      right: space(3);
+      bottom: 0;
+      height: 2px;
+      background-color: color('accent');
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform $transition;
+    }
+
+    &:hover {
+      color: color('text');
+    }
+
+    &.is-active {
+      color: color('accent');
+
+      &::after {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  // Shrunk state, toggled by js/navbar.js once the page is scrolled.
+  &.is-scrolled {
+    height: $nav-h-small;
+    border-bottom-color: color('border');
+    background-color: rgba(color('bg'), 0.92);
+    box-shadow: 0 8px 24px rgba(color('black'), 0.35);
+    backdrop-filter: blur(10px);
+
+    .navbar__logo {
+      font-size: 1.25rem;
+    }
+
+    .navbar__link {
+      padding-block: space(1);
+      font-size: 0.875rem;
+    }
+  }
+
+  @include below($bp-narrow) {
+    &__links {
+      gap: 0;
+    }
+
+    &__link {
+      padding-inline: space(2);
+      font-size: 0.8125rem;
+
+      &::after {
+        left: space(2);
+        right: space(2);
+      }
+    }
+
+    &.is-scrolled .navbar__link {
+      font-size: 0.75rem;
+    }
+  }
+}
