@@ -9,6 +9,7 @@ Usage:
     python scripts/make_placeholder_reel.py
 """
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -34,8 +35,9 @@ SCENES = [
     ("prairie roasters", "a fast single-page site for a local roaster"),
     ("jukeplox", "a self-hosted party jukebox for plex"),
 ]
-# Browsers play H.264 in .mp4 everywhere; VP9 in .webm is the fallback.
-CODECS = [("avc1", "reel.mp4"), ("VP90", "reel.webm")]
+# H.264 in .mp4 plays in every browser, and src/index.html references exactly
+# this file, so there is no fallback format: a different name would go unused.
+CODEC, OUTPUT_NAME = "avc1", "reel.mp4"
 
 
 def background():
@@ -94,30 +96,35 @@ def render(base, index):
     return frame
 
 
-def write(codec, name):
-    path = ASSETS / name
-    writer = cv2.VideoWriter(str(path), cv2.VideoWriter_fourcc(*codec), FPS, OUTPUT_SIZE)
-    if not writer.isOpened():
-        return None
-    base = background()
-    for index in range(FPS * SECONDS):
-        writer.write(cv2.resize(render(base, index), OUTPUT_SIZE, interpolation=cv2.INTER_AREA))
-    writer.release()
-    if not path.exists() or path.stat().st_size < 10_000:
-        path.unlink(missing_ok=True)
-        return None
-    return path
+def write():
+    """Render to a scratch file and only then replace the real clip, so a failed
+    encode never destroys a reel that was already there."""
+    path = ASSETS / OUTPUT_NAME
+    scratch = ASSETS / ("rendering-" + OUTPUT_NAME)
+    writer = cv2.VideoWriter(str(scratch), cv2.VideoWriter_fourcc(*CODEC), FPS, OUTPUT_SIZE)
+    try:
+        if not writer.isOpened():
+            return None
+        base = background()
+        for index in range(FPS * SECONDS):
+            writer.write(cv2.resize(render(base, index), OUTPUT_SIZE, interpolation=cv2.INTER_AREA))
+        writer.release()
+        if not scratch.exists() or scratch.stat().st_size < 10_000:
+            return None
+        os.replace(scratch, path)
+        return path
+    finally:
+        writer.release()
+        scratch.unlink(missing_ok=True)
 
 
 def main():
-    for codec, name in CODECS:
-        path = write(codec, name)
-        if path:
-            print(f"wrote {path.relative_to(REPO_ROOT)} ({path.stat().st_size / 1e6:.2f} MB, {codec})")
-            return 0
-        print(f"codec {codec} unavailable, trying the next one", file=sys.stderr)
-    print("no browser-playable codec could be written", file=sys.stderr)
-    return 1
+    path = write()
+    if not path:
+        print(f"could not encode {CODEC}; {OUTPUT_NAME} was left untouched", file=sys.stderr)
+        return 1
+    print(f"wrote {path.relative_to(REPO_ROOT)} ({path.stat().st_size / 1e6:.2f} MB, {CODEC})")
+    return 0
 
 
 if __name__ == "__main__":

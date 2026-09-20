@@ -48,8 +48,8 @@ Everything below is placeholder. The page is built to be submitted as-is if you 
 
 - [ ] Close every Claude Code session for this repo.
 - [ ] In a plain terminal: `python scripts/export_llm_logs.py`, then `git add llm_logs.csv`, `git commit -m "docs: final LLM chat log"`, and `git push`.
-- [ ] If you cloned the repo fresh on another machine, re-enable the commit hook first: `git config core.hooksPath .githooks`.
-- [ ] If you used any other LLM tool for this MP (ChatGPT, Copilot chat, and so on), add those chat links or transcripts to `llm_logs.csv` by hand. The exporter only sees Claude Code.
+- [ ] If you cloned the repo fresh on another machine, do two things first. Re-enable the commit hook with `git config core.hooksPath .githooks`. Then recreate `.llm_log_redact.txt` in the repo root, because it is gitignored: one term per line for anything that must never appear in the public log, such as the part of your email address before the `@`. It may be empty, but the exporter refuses to run without it.
+- [ ] If you used any other LLM tool for this MP (ChatGPT, Copilot chat, and so on), add a row per chat to `llm_logs.csv` by hand. The exporter only sees Claude Code. Leave the header row alone, leave `entry_id` empty, and put the share link or transcript in `content`; the exporter gives the row an id and keeps it on every later run.
 
 ## 5. Submission form
 
@@ -83,7 +83,7 @@ These are judgment calls the build made. None is likely to be a problem, but rul
 ## How the build was verified
 
 - `npm run build` succeeds, and `npm test` passes (11 tests of the scroll, position-indicator, and carousel math).
-- `python -m unittest discover -s scripts -p "test_*.py"` passes (11 tests of the log exporter).
+- `python -m unittest discover -s scripts -p "test_*.py"` passes (25 tests of the log exporter).
 - The page was driven in headless Chrome at the graded sizes: no horizontal scrollbar, navbar on one line, three Skills columns, About side-by-side at 1024 and up and stacked at 768, every nav item lands flush under the navbar and ends highlighted, Contact highlights at the page bottom, the carousel wraps and ignores mid-transition clicks, and the modal traps focus, returns it, locks scroll without shifting the page, and closes by X, Escape, and outside click.
 - The built site was served from a `/cs409-mp1/` subdirectory with no failed or out-of-path requests, and the reel played.
 - `src/index.html` contains no `style` attribute, no inline script, and no `table`; the running page has no element with a `style` attribute either.

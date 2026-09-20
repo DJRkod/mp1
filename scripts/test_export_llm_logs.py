@@ -48,6 +48,7 @@ class ExporterTestCase(unittest.TestCase):
         self.transcripts.mkdir()
         self.output = root / "llm_logs.csv"
         self.redact_file = root / ".llm_log_redact.txt"
+        self.redact_file.write_text("", encoding="utf-8")
         patches = [
             mock.patch.object(exporter, "OUTPUT", self.output),
             mock.patch.object(exporter, "REDACT_FILE", self.redact_file),
@@ -145,6 +146,130 @@ class RedactionTest(ExporterTestCase):
         self.redact_file.write_text("keepsake\n", encoding="utf-8")
         self.run_export()
         self.assertNotIn("keepsake", self.rows()[0]["content"])
+
+
+class RowKindTest(ExporterTestCase):
+    def kinds(self):
+        return [row["kind"] for row in self.rows()]
+
+    def test_skill_text_injected_by_the_harness_is_skill_context(self):
+        self.write_transcript([entry("u1", "user", [{"type": "text", "text": "# Skill body"}],
+                                     "2026-09-20T10:00:00Z", isMeta=True)])
+        self.run_export()
+        self.assertEqual(self.kinds(), ["skill_context"])
+
+    def test_slash_command_with_arguments_is_a_prompt(self):
+        text = "<command-name>/plan</command-name>\n<command-args>Build the navbar</command-args>"
+        self.write_transcript([entry("u1", "user", text, "2026-09-20T10:00:00Z")])
+        self.run_export()
+        self.assertEqual(self.kinds(), ["prompt"])
+
+    def test_slash_command_without_arguments_is_a_command(self):
+        text = "<command-name>/model</command-name>\n<command-args></command-args>"
+        self.write_transcript([entry("u1", "user", text, "2026-09-20T10:00:00Z")])
+        self.run_export()
+        self.assertEqual(self.kinds(), ["command"])
+
+    def test_subagent_rows_are_tagged(self):
+        self.write_transcript([entry("a1", "assistant", [{"type": "text", "text": "Reviewing."}],
+                                     "2026-09-20T10:00:00Z", isSidechain=True)])
+        self.run_export()
+        self.assertEqual(self.kinds(), ["subagent_response"])
+
+
+class TruncationTest(ExporterTestCase):
+    def long_result(self, body):
+        return [entry("u1", "user", [{"type": "tool_result", "content": body}], "2026-09-20T10:00:00Z")]
+
+    def test_long_tool_results_are_cut_with_a_marker_and_full_disables_it(self):
+        self.write_transcript(self.long_result("x" * 9000))
+        self.run_export()
+        content = self.rows()[0]["content"]
+        self.assertTrue(content.endswith("[... truncated, 9000 characters total]"))
+        self.assertLess(len(content), 9000)
+
+        self.run_export("--full")
+        self.assertEqual(self.rows()[0]["content"], "x" * 9000)
+
+    def test_long_responses_are_never_cut(self):
+        self.write_transcript([entry("a1", "assistant", [{"type": "text", "text": "y" * 9000}],
+                                     "2026-09-20T10:00:00Z")])
+        self.run_export()
+        self.assertEqual(len(self.rows()[0]["content"]), 9000)
+
+    def test_an_email_straddling_the_cut_is_still_redacted(self):
+        email = "someone.private@example.com"
+        body = "x" * (exporter.DEFAULT_CAP - 12) + email + "x" * 4000
+        self.write_transcript(self.long_result(body))
+        self.run_export()
+        content = self.rows()[0]["content"]
+        self.assertNotIn("someone", content)
+        self.assertNotIn("@example", content)
+
+
+class ExistingLogTest(ExporterTestCase):
+    def test_the_course_template_placeholder_is_replaced(self):
+        self.output.write_text("example_chatgpt_log_link1\nexample_bing_chat_log_link2", encoding="utf-8")
+        self.write_transcript(CONVERSATION)
+        self.run_export()
+        self.assertEqual(len(self.rows()), 4)
+
+    def test_an_unrecognized_existing_file_blocks_instead_of_being_overwritten(self):
+        self.output.write_text("my,own,columns\n1,2,3\n", encoding="utf-8")
+        self.write_transcript(CONVERSATION)
+        with self.assertRaises(ValueError):
+            self.run_export()
+        self.assertIn("my,own,columns", self.output.read_text(encoding="utf-8"))
+
+    def test_an_unreadable_existing_log_blocks_instead_of_dropping_its_rows(self):
+        self.write_transcript(CONVERSATION)
+        self.run_export()
+        before = self.output.read_bytes()
+        real_open = open
+
+        def locked(path, *args, **kwargs):
+            mode = args[0] if args else kwargs.get("mode", "r")
+            if Path(path) == self.output and "r" in mode:
+                raise PermissionError("file is locked")
+            return real_open(path, *args, **kwargs)
+
+        with mock.patch("builtins.open", side_effect=locked), self.assertRaises(PermissionError):
+            self.run_export()
+        self.assertEqual(self.output.read_bytes(), before)
+
+    def test_hand_added_rows_without_an_id_survive_reexport_exactly_once(self):
+        self.write_transcript(CONVERSATION)
+        self.run_export()
+        with open(self.output, "a", encoding="utf-8", newline="") as handle:
+            csv.writer(handle, quoting=csv.QUOTE_ALL).writerow(
+                ["", "2026-09-19T08:00:00Z", "", "gpt", "user", "prompt", "https://chat.example/share/abc"])
+        self.run_export()
+        self.run_export()
+        manual = [row for row in self.rows() if "chat.example" in row["content"]]
+        self.assertEqual(len(manual), 1)
+        self.assertTrue(manual[0]["entry_id"].startswith("manual:"))
+        self.assertEqual(len(self.rows()), 5)
+
+    def test_no_temp_file_is_left_behind(self):
+        self.write_transcript(CONVERSATION)
+        self.run_export()
+        with FailureVisibilityTest.failing_replace(self), self.assertRaises(PermissionError):
+            self.run_export()
+        self.assertEqual([p.name for p in self.output.parent.glob("*.tmp")], [])
+
+
+class RedactionFileTest(ExporterTestCase):
+    def test_a_missing_term_file_blocks_the_export(self):
+        self.redact_file.unlink()
+        self.write_transcript(CONVERSATION)
+        with self.assertRaises(FileNotFoundError):
+            self.run_export()
+
+    def test_a_term_file_saved_with_a_bom_and_crlf_still_redacts_its_first_term(self):
+        self.redact_file.write_bytes("\ufeffsecretname\r\nother\r\n".encode("utf-8"))
+        self.write_transcript([entry("u1", "user", "find secretname here", "2026-09-20T10:00:00Z")])
+        self.run_export()
+        self.assertNotIn("secretname", self.rows()[0]["content"])
 
 
 class FailureVisibilityTest(ExporterTestCase):

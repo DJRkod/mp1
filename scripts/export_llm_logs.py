@@ -17,6 +17,7 @@ Usage:
 """
 import argparse
 import csv
+import hashlib
 import json
 import os
 import re
@@ -103,7 +104,7 @@ def rows_from_entry(entry):
             yield index, role, row_kind, text
 
 
-def read_transcripts(cap):
+def read_transcripts(cap, redact):
     rows = {}
     directory = transcript_dir()
     for path in sorted(directory.rglob("*.jsonl")) if directory.is_dir() else []:
@@ -120,6 +121,9 @@ def read_transcripts(cap):
                 for index, role, kind, text in rows_from_entry(entry):
                     if entry.get("isSidechain"):
                         kind = "subagent_" + kind
+                    # Redact first: an address cut in half by the cap below would no
+                    # longer match, and its first half would be published.
+                    text = redact(text)
                     if cap and kind.replace("subagent_", "") in CAPPED_KINDS and len(text) > cap:
                         text = "%s\n[... truncated, %d characters total]" % (text[:cap], len(text))
                     entry_id = "%s:%d" % (entry.get("uuid", ""), index)
@@ -136,9 +140,15 @@ def read_transcripts(cap):
 
 
 def build_redactor():
-    terms = []
-    if REDACT_FILE.exists():
-        terms = [line.strip() for line in REDACT_FILE.read_text(encoding="utf-8").splitlines()]
+    # Fail closed: without the term file, rows rebuilt from transcripts would be
+    # written to a public repo unscrubbed, and nothing would look wrong.
+    if not REDACT_FILE.exists():
+        raise FileNotFoundError(
+            "%s is missing; create it (one term per line, empty if there is nothing to redact)"
+            % REDACT_FILE.name)
+    # utf-8-sig: Windows Notepad saves with a BOM, which would otherwise glue
+    # itself to the first term and stop it matching.
+    terms = [line.strip() for line in REDACT_FILE.read_text(encoding="utf-8-sig").splitlines()]
     literal = None
     if any(terms):
         ordered = sorted((t for t in terms if t), key=len, reverse=True)
@@ -152,33 +162,56 @@ def build_redactor():
     return redact
 
 
+def is_template_placeholder(fieldnames):
+    """The course template ships llm_logs.csv as bare example lines, or empty."""
+    return not fieldnames or (len(fieldnames) == 1 and fieldnames[0].startswith("example_"))
+
+
 def read_existing():
+    """Rows already in the log. Read errors propagate on purpose: treating an
+    unreadable log as empty would silently drop every row whose transcript is
+    gone, and the export would still report success."""
     if not OUTPUT.exists():
         return {}
-    try:
-        with open(OUTPUT, encoding="utf-8-sig", newline="") as handle:
-            reader = csv.DictReader(handle)
-            if reader.fieldnames != FIELDS:
-                return {}  # template placeholder or foreign format: start over
-            return {row["entry_id"]: row for row in reader if row.get("entry_id")}
-    except (OSError, csv.Error):
-        return {}
+    rows = {}
+    with open(OUTPUT, encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        if reader.fieldnames != FIELDS:
+            if is_template_placeholder(reader.fieldnames):
+                return {}
+            raise ValueError("%s has unexpected columns %s; refusing to overwrite it"
+                             % (OUTPUT.name, reader.fieldnames))
+        for raw in reader:
+            row = {field: raw.get(field) or "" for field in FIELDS}
+            if not row["entry_id"]:
+                # A row added by hand, for example a chat link from another LLM
+                # tool. Give it a stable id so it survives every later export.
+                seed = "%s|%s" % (row["timestamp"], row["content"])
+                row["entry_id"] = "manual:" + hashlib.sha1(seed.encode("utf-8")).hexdigest()[:12]
+            rows[row["entry_id"]] = row
+    return rows
 
 
 def export(args):
-    rows = read_existing()
-    rows.update(read_transcripts(0 if args.full else args.cap))
-    ordered = sorted(rows.values(), key=lambda row: (row["timestamp"], row["entry_id"]))
     redact = build_redactor()
+    rows = read_existing()
+    rows.update(read_transcripts(0 if args.full else args.cap, redact))
+    ordered = sorted(rows.values(), key=lambda row: (row["timestamp"], row["entry_id"]))
+    # Second pass: rows kept from earlier exports must honor terms added since.
     for row in ordered:
         row["content"] = redact(row["content"])
 
-    temp = OUTPUT.with_suffix(".csv.tmp")
-    with open(temp, "w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=FIELDS, quoting=csv.QUOTE_ALL)
-        writer.writeheader()
-        writer.writerows(ordered)
-    os.replace(temp, OUTPUT)
+    # One temp file per process: a Claude Code hook and a git commit can run
+    # this at the same moment, and they must not write into each other's file.
+    temp = OUTPUT.with_name("%s.%d.tmp" % (OUTPUT.name, os.getpid()))
+    try:
+        with open(temp, "w", encoding="utf-8-sig", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=FIELDS, quoting=csv.QUOTE_ALL)
+            writer.writeheader()
+            writer.writerows(ordered)
+        os.replace(temp, OUTPUT)
+    finally:
+        temp.unlink(missing_ok=True)
     return len(ordered)
 
 
@@ -196,6 +229,11 @@ def main():
         # A failure here raises, so the git pre-commit hook blocks the commit.
         count = export(args)
         print("llm_logs.csv: %d rows from %s" % (count, transcript_dir()), file=sys.stderr)
+        if not any(transcript_dir().rglob("*.jsonl")):
+            # Not an error: on a machine where Claude Code was never used for this
+            # repo there is nothing new to log, and the existing rows are kept.
+            print("warning: no Claude Code transcripts found there; the log was left as it was",
+                  file=sys.stderr)
         return 0
 
     try:

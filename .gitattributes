@@ -1,0 +1,4 @@
+# The pre-commit hook is a POSIX shell script: CRLF line endings break it.
+.githooks/* text eol=lf
+# The exporter writes this file itself; keep Git from rewriting its line endings.
+llm_logs.csv -text

@@ -51,12 +51,19 @@ function bind(dialog) {
     requestClose(dialog);
   });
 
-  // The panel fills the dialog box, so a click whose target is the dialog
-  // itself can only have landed on the backdrop.
+  // The panel fills the dialog box, so an event whose target is the dialog
+  // itself can only have landed on the backdrop. The press must start there
+  // too: dragging a text selection out of the panel ends in a click that the
+  // browser also reports on the dialog, and that must not close it.
+  let pressedOnBackdrop = false;
+  dialog.addEventListener('pointerdown', (event) => {
+    pressedOnBackdrop = event.target === dialog;
+  });
   dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) {
+    if (event.target === dialog && pressedOnBackdrop) {
       requestClose(dialog);
     }
+    pressedOnBackdrop = false;
   });
 
   dialog.querySelectorAll('[data-modal-close]').forEach((button) => {
