@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/export_llm_logs.py\" 2>/dev/null || true",
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/export_llm_logs.py\" --hook",
             "timeout": 30
           }
         ]
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/export_llm_logs.py\" 2>/dev/null || true",
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/export_llm_logs.py\" --hook",
             "timeout": 30
           }
         ]
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/export_llm_logs.py\" 2>/dev/null || true",
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/export_llm_logs.py\" --hook",
             "timeout": 30
           }
         ]

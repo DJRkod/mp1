@@ -13,6 +13,7 @@ kept.
 Usage:
     python scripts/export_llm_logs.py            # regenerate llm_logs.csv
     python scripts/export_llm_logs.py --full     # do not truncate long tool output
+    python scripts/export_llm_logs.py --hook     # for Claude Code hooks: report failures, never raise
 """
 import argparse
 import csv
@@ -164,13 +165,7 @@ def read_existing():
         return {}
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--full", action="store_true", help="never truncate content")
-    parser.add_argument("--cap", type=int, default=DEFAULT_CAP,
-                        help="max characters for tool results / skill context")
-    args = parser.parse_args()
-
+def export(args):
     rows = read_existing()
     rows.update(read_transcripts(0 if args.full else args.cap))
     ordered = sorted(rows.values(), key=lambda row: (row["timestamp"], row["entry_id"]))
@@ -184,8 +179,32 @@ def main():
         writer.writeheader()
         writer.writerows(ordered)
     os.replace(temp, OUTPUT)
-    print("llm_logs.csv: %d rows from %s" % (len(ordered), transcript_dir()), file=sys.stderr)
+    return len(ordered)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--full", action="store_true", help="never truncate content")
+    parser.add_argument("--cap", type=int, default=DEFAULT_CAP,
+                        help="max characters for tool results / skill context")
+    parser.add_argument("--hook", action="store_true",
+                        help="Claude Code hook mode: never fail the hook, but report an "
+                             "export failure to the user as a system message")
+    args = parser.parse_args()
+
+    if not args.hook:
+        # A failure here raises, so the git pre-commit hook blocks the commit.
+        count = export(args)
+        print("llm_logs.csv: %d rows from %s" % (count, transcript_dir()), file=sys.stderr)
+        return 0
+
+    try:
+        export(args)
+    except Exception as error:  # a stale log must be visible, never silent
+        print(json.dumps({"systemMessage": "llm_logs.csv export failed: %s: %s"
+                                           % (type(error).__name__, error)}))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
