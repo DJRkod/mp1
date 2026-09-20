@@ -1,1 +1,3 @@
-/* Your SCSS here. */
+// Entry stylesheet. Partials load in cascade order; tokens and mixins emit no
+// CSS themselves and are pulled in by each partial that needs them.
+@use 'base';

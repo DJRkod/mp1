@@ -4,7 +4,8 @@
   "description": "CS409 MP1",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "node --test tests/geometry.test.mjs"
   },
   "author": "UIUC Web Programming Staff",
   "license": "ISC",

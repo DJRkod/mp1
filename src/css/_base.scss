@@ -1,0 +1,157 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  @include emit-custom-properties;
+}
+
+html {
+  // Keep the scrollbar gutter reserved so locking scroll for a modal does not
+  // shift the page or the fixed navbar sideways.
+  scrollbar-gutter: stable;
+  -webkit-text-size-adjust: 100%;
+
+  &.is-scroll-locked {
+    overflow: hidden;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: color('bg');
+  color: color('text');
+  font-family: font('sans');
+  font-size: type('base');
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: font('mono');
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: color('accent');
+  text-decoration: none;
+  transition: color $transition;
+
+  @include focus-ring;
+
+  &:hover {
+    color: color('text');
+  }
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.container {
+  @include container;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: space(6);
+
+  &__label {
+    @include label;
+  }
+
+  &__title {
+    margin-top: space(2);
+    font-size: type('xl');
+  }
+
+  &__lead {
+    max-width: 38rem;
+    margin: space(3) auto 0;
+    color: color('text-muted');
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: space(2);
+  padding: space(2) space(4);
+  border: 1px solid color('accent');
+  border-radius: $radius;
+  background-color: transparent;
+  color: color('accent');
+  font-family: font('mono');
+  font-size: type('sm');
+  transition: background-color $transition, color $transition, transform $transition;
+
+  @include focus-ring;
+
+  &:hover {
+    background-color: color('accent');
+    color: color('bg');
+    transform: translateY(-2px);
+  }
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: space(2);
+
+  li {
+    padding: space(1) space(2);
+    border: 1px solid color('border');
+    border-radius: 999px;
+    font-family: font('mono');
+    font-size: type('xs');
+    color: color('text-muted');
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@include reduced-motion {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

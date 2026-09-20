@@ -1,0 +1,65 @@
+@use 'tokens' as *;
+
+// Shared content column: every stripe centers its content in the same width.
+@mixin container {
+  width: 100%;
+  max-width: $content-max;
+  margin-inline: auto;
+  padding-inline: space(4);
+}
+
+// A full-width horizontal stripe. Tall enough that its top can always reach
+// the navbar's bottom edge, so the position indicator can land on it.
+@mixin stripe($tinted: false) {
+  min-height: calc(100vh - #{$nav-h-small});
+  padding-block: space(8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @if $tinted {
+    background-color: color('bg-tint');
+  } @else {
+    background-color: color('bg');
+  }
+}
+
+@mixin center($direction: column) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid color('accent');
+    outline-offset: 3px;
+  }
+}
+
+@mixin below($breakpoint) {
+  @media (max-width: #{$breakpoint - 1px}) {
+    @content;
+  }
+}
+
+@mixin card {
+  background-color: color('surface');
+  border: 1px solid color('border');
+  border-radius: $radius;
+}
+
+@mixin label {
+  font-family: font('mono');
+  font-size: type('xs');
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color('accent');
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
