@@ -7,3 +7,8 @@ public/*
 .DS_Store
 dist/
 dist/*
+
+# LLM log tooling
+.llm_log_redact.txt
+llm_logs.csv.tmp
+__pycache__/
