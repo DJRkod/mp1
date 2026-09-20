@@ -3,10 +3,14 @@
  */
 import { initNavbar } from './navbar.js';
 import { initSmoothScroll } from './scroll.js';
+import { initCarousels } from './carousel.js';
+import { initModals } from './modal.js';
 
 const init = () => {
   initNavbar();
   initSmoothScroll();
+  initCarousels();
+  initModals();
 };
 
 if (document.readyState === 'loading') {

@@ -60,3 +60,14 @@ export function easeInOutCubic(progress) {
   const t = Math.min(Math.max(progress, 0), 1);
   return t < 0.5 ? 4 * t * t * t : 1 - ((-2 * t + 2) ** 3) / 2;
 }
+
+/**
+ * Wraps an index into 0..count-1 so stepping past either end of a list comes
+ * back around. Returns 0 when the list is empty.
+ */
+export function wrapIndex(index, count) {
+  if (count <= 0) {
+    return 0;
+  }
+  return ((index % count) + count) % count;
+}

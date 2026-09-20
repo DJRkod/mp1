@@ -6,6 +6,7 @@ import {
   scrollTargetY,
   scrollDuration,
   easeInOutCubic,
+  wrapIndex,
 } from '../src/js/lib/geometry.js';
 
 // Three sections, each 900px tall, measured in viewport coordinates.
@@ -74,4 +75,17 @@ test('easeInOutCubic is anchored, symmetric, monotonic, and clamped', () => {
     assert.ok(value >= previous, `not monotonic at ${step / 100}`);
     previous = value;
   }
+});
+
+test('wrapIndex wraps past either end of the slide list', () => {
+  assert.equal(wrapIndex(3, 3), 0);
+  assert.equal(wrapIndex(-1, 3), 2);
+  assert.equal(wrapIndex(1, 3), 1);
+  assert.equal(wrapIndex(-4, 3), 2);
+});
+
+test('wrapIndex always returns 0 for a single slide or none', () => {
+  assert.equal(wrapIndex(5, 1), 0);
+  assert.equal(wrapIndex(-2, 1), 0);
+  assert.equal(wrapIndex(2, 0), 0);
 });

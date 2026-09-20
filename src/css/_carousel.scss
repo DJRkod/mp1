@@ -1,6 +1,8 @@
 @use 'tokens' as *;
 @use 'mixins' as *;
 
+$carousel-max-slides: 8;
+
 // Arrows sit in their own side columns, so they are vertically centered beside
 // the slides and can never cover a slide's text or its Details button.
 .carousel {
@@ -14,9 +16,17 @@
     border-radius: $radius;
   }
 
+  // js/carousel.js only records the current slide in data-index; each index
+  // maps to a transform here, so the script never writes an inline style.
   &__track {
     display: flex;
     transition: transform 400ms ease;
+
+    @for $index from 1 through $carousel-max-slides - 1 {
+      &[data-index='#{$index}'] {
+        transform: translateX(-100% * $index);
+      }
+    }
   }
 
   &__slide {
