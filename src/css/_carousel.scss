@@ -1,7 +1,9 @@
 @use 'tokens' as *;
 @use 'mixins' as *;
 
-$carousel-max-slides: 8;
+// Headroom, not dead code: slides can be added in index.html up to this count
+// without touching the stylesheet.
+$carousel-max-slides: 6;
 
 // Arrows sit in their own side columns, so they are vertically centered beside
 // the slides and can never cover a slide's text or its Details button.
@@ -35,18 +37,11 @@ $carousel-max-slides: 8;
   }
 
   &__arrow {
-    width: 52px;
-    height: 52px;
-    border: 1px solid color('border');
-    border-radius: 50%;
+    @include icon-button(52px);
+    @include focus-ring;
     background-color: color('surface');
     color: color('text');
     font-size: 1.125rem;
-    transition: background-color $transition, border-color $transition, color $transition,
-      transform $transition;
-
-    @include center;
-    @include focus-ring;
 
     &:hover {
       border-color: color('accent');

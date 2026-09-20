@@ -6,11 +6,13 @@
 
   // Fallback landing offset for plain anchor jumps; js/scroll.js computes the
   // same offset itself when it animates.
-  scroll-margin-top: $nav-h-small;
+  scroll-margin-top: var(--nav-h-small);
 
+  // Tinted stripes carry a soft Illini Blue glow behind their content.
   &--tinted {
     @include stripe($tinted: true);
     border-block: 1px solid color('border');
+    background-image: radial-gradient(ellipse at top, rgba(color('illini-blue'), 0.55), transparent 70%);
   }
 }
 

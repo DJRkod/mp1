@@ -94,16 +94,10 @@
     position: absolute;
     top: space(3);
     right: space(3);
-    width: 40px;
-    height: 40px;
-    border: 1px solid color('border');
-    border-radius: 50%;
+    @include icon-button(40px);
+    @include focus-ring;
     background-color: transparent;
     color: color('text-muted');
-    transition: border-color $transition, color $transition, transform $transition;
-
-    @include center;
-    @include focus-ring;
 
     &:hover {
       border-color: color('accent');

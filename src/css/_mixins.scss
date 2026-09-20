@@ -3,7 +3,7 @@
 // Shared content column: every stripe centers its content in the same width.
 @mixin container {
   width: 100%;
-  max-width: $content-max;
+  max-width: var(--content-max);
   margin-inline: auto;
   padding-inline: space(4);
 }
@@ -11,7 +11,7 @@
 // A full-width horizontal stripe. Tall enough that its top can always reach
 // the navbar's bottom edge, so the position indicator can land on it.
 @mixin stripe($tinted: false) {
-  min-height: calc(100vh - #{$nav-h-small});
+  min-height: calc(100vh - var(--nav-h-small));
   padding-block: space(8);
   display: flex;
   flex-direction: column;
@@ -48,6 +48,19 @@
   background-color: color('surface');
   border: 1px solid color('border');
   border-radius: $radius;
+}
+
+// Round icon-only control: carousel arrows, the modal close button, and the
+// social links. Each call site adds its own colors and hover motion.
+@mixin icon-button($size) {
+  width: $size;
+  height: $size;
+  border: 1px solid color('border');
+  border-radius: 50%;
+  transition: background-color $transition, border-color $transition, color $transition,
+    transform $transition;
+
+  @include center;
 }
 
 @mixin label {

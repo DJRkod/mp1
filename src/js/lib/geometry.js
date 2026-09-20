@@ -8,6 +8,10 @@ const MIN_SCROLL_MS = 400;
 const MAX_SCROLL_MS = 900;
 const MS_PER_PIXEL = 0.25;
 
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
 /**
  * Index of the section lying directly under the navbar's bottom edge.
  *
@@ -41,7 +45,7 @@ export function activeSectionIndex(rects, navBottom, atBottom) {
  * Scroll position that lands a section's top flush under the small navbar.
  */
 export function scrollTargetY(sectionTop, smallNavHeight, maxScroll) {
-  return Math.min(Math.max(sectionTop - smallNavHeight, 0), maxScroll);
+  return clamp(sectionTop - smallNavHeight, 0, maxScroll);
 }
 
 /**
@@ -49,15 +53,14 @@ export function scrollTargetY(sectionTop, smallNavHeight, maxScroll) {
  * longer, within fixed bounds so no trip feels instant or sluggish.
  */
 export function scrollDuration(distance) {
-  const scaled = Math.abs(distance) * MS_PER_PIXEL;
-  return Math.min(Math.max(scaled, MIN_SCROLL_MS), MAX_SCROLL_MS);
+  return clamp(Math.abs(distance) * MS_PER_PIXEL, MIN_SCROLL_MS, MAX_SCROLL_MS);
 }
 
 /**
  * Cubic ease-in-out over progress 0..1; out-of-range progress is clamped.
  */
 export function easeInOutCubic(progress) {
-  const t = Math.min(Math.max(progress, 0), 1);
+  const t = clamp(progress, 0, 1);
   return t < 0.5 ? 4 * t * t * t : 1 - ((-2 * t + 2) ** 3) / 2;
 }
 

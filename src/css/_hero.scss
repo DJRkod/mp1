@@ -27,7 +27,7 @@
 .hero {
   position: relative;
   min-height: 100vh;
-  padding: $nav-h-large space(4) space(8);
+  padding: var(--nav-h-large) space(4) space(8);
   text-align: center;
 
   // The content is centered by the layout, not by fixed offsets, so it stays

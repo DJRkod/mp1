@@ -1,6 +1,6 @@
 // Design tokens. Every color, size, and breakpoint used by the other partials
-// comes from here, and the maps are also emitted as CSS custom properties so
-// script and styles share one source of truth.
+// comes from here. The few values that script or calc() needs at run time are
+// also emitted as CSS custom properties, so they still have one source of truth.
 @use 'sass:map';
 
 $colors: (
@@ -75,14 +75,6 @@ $bp-medium: 900px;
 }
 
 @mixin emit-custom-properties {
-  @each $name, $value in $colors {
-    --color-#{$name}: #{$value};
-  }
-
-  @each $name, $value in $space {
-    --space-#{$name}: #{$value};
-  }
-
   --nav-h-large: #{$nav-h-large};
   --nav-h-small: #{$nav-h-small};
   --content-max: #{$content-max};
