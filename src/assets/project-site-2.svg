@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Browser mockup of a small business landing page">
+  <rect width="800" height="500" rx="14" fill="#0d1626" stroke="#22314d" stroke-width="2"/>
+  <rect width="800" height="46" rx="14" fill="#111c30"/>
+  <rect y="32" width="800" height="14" fill="#111c30"/>
+  <circle cx="28" cy="23" r="7" fill="#ff5f05"/>
+  <circle cx="52" cy="23" r="7" fill="#3a4a68"/>
+  <circle cx="76" cy="23" r="7" fill="#3a4a68"/>
+  <rect x="120" y="11" width="560" height="24" rx="12" fill="#0a0d12"/>
+  <rect x="0" y="46" width="800" height="230" fill="#13294b"/>
+  <g fill="#3a4a68">
+    <rect x="560" y="70" width="50" height="10" rx="5"/>
+    <rect x="630" y="70" width="50" height="10" rx="5"/>
+    <rect x="700" y="70" width="50" height="10" rx="5"/>
+  </g>
+  <rect x="50" y="66" width="90" height="18" rx="9" fill="#ff5f05"/>
+  <rect x="200" y="130" width="400" height="26" rx="13" fill="#e6e9ef"/>
+  <rect x="260" y="172" width="280" height="14" rx="7" fill="#9aa6b8"/>
+  <rect x="330" y="210" width="140" height="38" rx="10" fill="#ff5f05"/>
+  <g fill="#111c30" stroke="#22314d">
+    <rect x="50" y="306" width="220" height="160" rx="8"/>
+    <rect x="290" y="306" width="220" height="160" rx="8"/>
+    <rect x="530" y="306" width="220" height="160" rx="8"/>
+  </g>
+  <g fill="#ff5f05">
+    <circle cx="160" cy="356" r="20"/>
+    <circle cx="400" cy="356" r="20"/>
+    <circle cx="640" cy="356" r="20"/>
+  </g>
+  <g fill="#3a4a68">
+    <rect x="100" y="396" width="120" height="12" rx="6"/>
+    <rect x="340" y="396" width="120" height="12" rx="6"/>
+    <rect x="580" y="396" width="120" height="12" rx="6"/>
+    <rect x="80" y="422" width="160" height="10" rx="5"/>
+    <rect x="320" y="422" width="160" height="10" rx="5"/>
+    <rect x="560" y="422" width="160" height="10" rx="5"/>
+  </g>
+</svg>

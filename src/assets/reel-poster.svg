@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-label="Demo reel poster">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#1d2d49" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="50%" r="70%">
+      <stop offset="0" stop-color="#13294b"/>
+      <stop offset="1" stop-color="#0a0d12"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#glow)"/>
+  <rect width="1280" height="720" fill="url(#grid)"/>
+  <circle cx="640" cy="330" r="74" fill="#0a0d12" stroke="#ff5f05" stroke-width="5"/>
+  <path d="M618 290v80l68-40z" fill="#ff5f05"/>
+  <text x="640" y="480" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="40" font-weight="700" fill="#e6e9ef">demo reel</text>
+  <text x="640" y="524" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="22" fill="#9aa6b8">raymond burt / selected work</text>
+</svg>

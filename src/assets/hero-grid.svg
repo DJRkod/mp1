@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M50 0H0V50" fill="none" stroke="#1d2d49" stroke-width="1"/>
+    </pattern>
+    <pattern id="grid-major" width="250" height="250" patternUnits="userSpaceOnUse">
+      <path d="M250 0H0V250" fill="none" stroke="#26395c" stroke-width="1.5"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="42%" r="65%">
+      <stop offset="0" stop-color="#13294b"/>
+      <stop offset="0.55" stop-color="#0d1626"/>
+      <stop offset="1" stop-color="#0a0d12"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <rect width="1600" height="900" fill="url(#grid-major)"/>
+  <g fill="none" stroke="#ff5f05" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55">
+    <path d="M0 200H150L200 250H400L450 200H600"/>
+    <path d="M1600 300H1400L1350 350H1150L1100 400H950"/>
+    <path d="M100 900V750L150 700H350L400 650V550"/>
+    <path d="M1500 900V800L1450 750H1250L1200 700V600"/>
+    <path d="M700 0V100L750 150H900L950 100V0"/>
+    <path d="M0 600H100L150 650H250"/>
+    <path d="M1600 650H1500L1450 600H1350"/>
+  </g>
+  <g fill="#ff5f05">
+    <circle cx="600" cy="200" r="6"/>
+    <circle cx="950" cy="400" r="6"/>
+    <circle cx="400" cy="550" r="6"/>
+    <circle cx="1200" cy="600" r="6"/>
+    <circle cx="250" cy="650" r="6"/>
+    <circle cx="1350" cy="600" r="6"/>
+  </g>
+  <g fill="#0a0d12" stroke="#ff5f05" stroke-width="2" opacity="0.8">
+    <circle cx="200" cy="250" r="5"/>
+    <circle cx="1350" cy="350" r="5"/>
+    <circle cx="150" cy="700" r="5"/>
+    <circle cx="1450" cy="750" r="5"/>
+    <circle cx="750" cy="150" r="5"/>
+  </g>
+</svg>
