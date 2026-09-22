@@ -1,15 +1,24 @@
 /*
- * Project carousel: side arrows, wrap-around, and a slide indicator.
+ * Project carousel: side arrows, seamless wrap-around, and a slide indicator.
  *
- * The track is moved by CSS alone. This module only records the current slide
- * in a data attribute, and _carousel.scss maps each index to a transform, so
- * no inline styles are ever written.
+ * The track is moved by CSS alone. This module only records state in data
+ * attributes, and _carousel.scss maps them to transforms and flex order, so no
+ * inline styles are ever written.
+ *
+ * At rest the current slide sits in the middle position of the track, with the
+ * previous slide on its left and the next on its right, whatever their order in
+ * the document. Each click therefore animates exactly one slide in the clicked
+ * direction, even across the ends of the list; once the transition ends the
+ * slides are re-ordered around the new current slide and the track snaps back
+ * to the middle with the transition switched off, which the eye cannot see.
  */
-import { wrapIndex } from './lib/geometry.js';
+import { slideOrder, wrapIndex } from './lib/geometry.js';
 
-// Longer than the CSS transition; releases the lock if transitionend is
-// never delivered (for example when the tab is hidden mid-slide).
-const UNLOCK_FALLBACK_MS = 700;
+// Track positions: the previous slide, the current slide, the next slide.
+const REST_POSITION = 1;
+// Longer than the CSS transition; settles the slide if transitionend is never
+// delivered (for example when the tab is hidden mid-slide).
+const SETTLE_FALLBACK_MS = 700;
 
 function initCarousel(root) {
   const track = root.querySelector('[data-carousel-track]');
@@ -22,17 +31,12 @@ function initCarousel(root) {
   }
 
   let current = 0;
-  let locked = false;
+  let pending = 0; // the step in flight: -1, 1, or 0 when at rest
   let fallbackTimer = 0;
 
-  const unlock = () => {
-    locked = false;
-    window.clearTimeout(fallbackTimer);
-  };
-
   const render = () => {
-    track.dataset.index = String(current);
     slides.forEach((slide, index) => {
+      slide.dataset.order = String(slideOrder(index, current, slides.length));
       // Off-screen slides leave the tab order and the accessibility tree.
       slide.inert = index !== current;
     });
@@ -41,30 +45,45 @@ function initCarousel(root) {
     }
   };
 
+  // Makes the slide that just scrolled into view the current one, and
+  // re-centres the track around it without animating.
+  const settle = () => {
+    window.clearTimeout(fallbackTimer);
+    if (!pending) {
+      return;
+    }
+    current = wrapIndex(current + pending, slides.length);
+    pending = 0;
+    track.classList.add('is-snapping');
+    render();
+    track.dataset.index = String(REST_POSITION);
+    // Flush the un-animated move before transitions come back on.
+    void track.offsetWidth;
+    track.classList.remove('is-snapping');
+  };
+
   const go = (step) => {
     // Clicks that arrive mid-transition are ignored rather than queued.
-    if (locked) {
+    if (pending || slides.length < 2) {
       return;
     }
-    const target = wrapIndex(current + step, slides.length);
-    if (target === current) {
-      return;
-    }
-    locked = true;
-    fallbackTimer = window.setTimeout(unlock, UNLOCK_FALLBACK_MS);
-    current = target;
-    render();
+    // With two slides the only other slide waits on the right, so both arrows
+    // bring it in from there.
+    pending = slides.length === 2 ? 1 : step;
+    fallbackTimer = window.setTimeout(settle, SETTLE_FALLBACK_MS);
+    track.dataset.index = String(REST_POSITION + pending);
   };
 
   track.addEventListener('transitionend', (event) => {
     if (event.target === track && event.propertyName === 'transform') {
-      unlock();
+      settle();
     }
   });
   previous.addEventListener('click', () => go(-1));
   next.addEventListener('click', () => go(1));
 
   render();
+  track.dataset.index = String(REST_POSITION);
 }
 
 export function initCarousels() {

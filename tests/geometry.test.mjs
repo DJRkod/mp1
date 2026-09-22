@@ -7,6 +7,7 @@ import {
   scrollDuration,
   easeInOutCubic,
   wrapIndex,
+  slideOrder,
 } from '../src/js/lib/geometry.js';
 
 // Three sections, each 900px tall, measured in viewport coordinates.
@@ -88,4 +89,17 @@ test('wrapIndex always returns 0 for a single slide or none', () => {
   assert.equal(wrapIndex(5, 1), 0);
   assert.equal(wrapIndex(-2, 1), 0);
   assert.equal(wrapIndex(2, 0), 0);
+});
+
+test('slideOrder keeps the current slide in the middle with its neighbours beside it', () => {
+  const orders = (current) => [0, 1, 2, 3].map((index) => slideOrder(index, current, 4));
+  assert.deepEqual(orders(0), [1, 2, 3, 0]);
+  assert.deepEqual(orders(3), [2, 3, 0, 1]);
+  // Every position is used exactly once.
+  assert.deepEqual([...orders(2)].sort(), [0, 1, 2, 3]);
+});
+
+test('slideOrder places the last slide before the first, so wrapping is one step', () => {
+  assert.equal(slideOrder(3, 0, 4), 0);
+  assert.equal(slideOrder(0, 3, 4), 2);
 });

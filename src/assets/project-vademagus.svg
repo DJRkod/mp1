@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Vade Magus, coming soon">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#1d2d49" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="45%" r="65%">
+      <stop offset="0" stop-color="#13294b"/>
+      <stop offset="1" stop-color="#0a0d12"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#glow)"/>
+  <rect width="800" height="500" fill="url(#grid)"/>
+  <!-- A twenty-sided die, outlined -->
+  <g fill="none" stroke="#ff5f05" stroke-width="5" stroke-linejoin="round">
+    <path d="M400 96l118 68v136l-118 68-118-68V164z"/>
+    <path d="M400 96l-64 130h128zM282 164l54 62M518 164l-54 62M336 226l64 142 64-142M282 300l54-74M518 300l-54-74M400 368V300"/>
+  </g>
+  <text x="400" y="428" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="34" font-weight="700" fill="#e6e9ef">coming soon</text>
+  <text x="400" y="464" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="18" fill="#9aa6b8">vade magus / in development</text>
+</svg>

@@ -18,22 +18,35 @@ $carousel-max-slides: 6;
     border-radius: $radius;
   }
 
-  // js/carousel.js only records the current slide in data-index; each index
-  // maps to a transform here, so the script never writes an inline style.
+  // js/carousel.js only writes data attributes; they map to a transform and a
+  // flex order here, so the script never writes an inline style. The track
+  // holds three positions (previous, current, next) and rests on the middle
+  // one; the slides take their places around the current slide via order.
   &__track {
     display: flex;
     transition: transform 400ms ease;
 
-    @for $index from 1 through $carousel-max-slides - 1 {
-      &[data-index='#{$index}'] {
-        transform: translateX(-100% * $index);
+    @for $position from 0 through 2 {
+      &[data-index='#{$position}'] {
+        transform: translateX(-100% * $position);
       }
+    }
+
+    // The silent re-centring after each slide happens with no transition.
+    &.is-snapping {
+      transition: none;
     }
   }
 
   &__slide {
     flex: 0 0 100%;
     min-width: 0;
+
+    @for $order from 0 through $carousel-max-slides - 1 {
+      &[data-order='#{$order}'] {
+        order: $order;
+      }
+    }
   }
 
   &__arrow {

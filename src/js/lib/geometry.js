@@ -74,3 +74,12 @@ export function wrapIndex(index, count) {
   }
   return ((index % count) + count) % count;
 }
+
+/**
+ * Visual position of a carousel slide when the current slide sits at
+ * position 1: its predecessor is at 0, its successor at 2, and the rest follow
+ * around the ring. Stepping either way is then always a one-slide move.
+ */
+export function slideOrder(index, current, count) {
+  return wrapIndex(index - current + 1, count);
+}

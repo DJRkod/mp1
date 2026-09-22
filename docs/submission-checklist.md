@@ -84,7 +84,7 @@ These are judgment calls the build made. None is likely to be a problem, but rul
 
 ## How the build was verified
 
-- `npm run build` succeeds, and `npm test` passes (11 tests of the scroll, position-indicator, and carousel math).
+- `npm run build` succeeds, and `npm test` passes (13 tests of the scroll, position-indicator, and carousel math).
 - `python -m unittest discover -s scripts -p "test_*.py"` passes (25 tests of the log exporter).
 - The page was driven in headless Chrome at the graded sizes: no horizontal scrollbar, navbar on one line, three Skills columns, About side-by-side at 1024 and up and stacked at 768, every nav item lands flush under the navbar and ends highlighted, Contact highlights at the page bottom, the carousel wraps and ignores mid-transition clicks, and the modal traps focus, returns it, locks scroll without shifting the page, and closes by X, Escape, and outside click.
 - The built site was served from a `/cs409-mp1/` subdirectory with no failed or out-of-path requests, and the reel played.
