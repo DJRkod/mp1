@@ -4,23 +4,23 @@ Due **Tuesday, Sep 22, 2026, 11:59 PM CT**. An undeployed site is capped at 80%,
 
 ## 1. Swap in your real content
 
-Everything below is placeholder. The page is built to be submitted as-is if you run out of time, but these are the things a grader would notice. All edits are in `src/index.html` unless noted; no SCSS or JavaScript changes are needed.
+Unchecked items below are still placeholder. The page is built to be submitted as-is if you run out of time, but these are the things a grader would notice. All edits are in `src/index.html` unless noted; no SCSS or JavaScript changes are needed.
 
-- [ ] **Photo.** Put your photo at `src/assets/avatar.jpg` (square, about 800x800) and change the `src` of the `about__photo` image from `assets/avatar.svg` to `assets/avatar.jpg`.
-- [ ] **Bio.** Rewrite the three paragraphs in the About section. The current copy was inferred from your GitHub profile: check the claim that your CS 410 group fine-tuned BERT models, and the three fact lines under the bio.
-- [ ] **Hero tagline.** One sentence under your name.
+- [x] **Photo.** Done: `src/assets/profile.jpg`, copied from MP0. It is 300px square, so the About column is capped at 300px to keep it sharp. A larger original would look better on high-density screens.
+- [x] **Bio.** Done: your own paragraph, plus the "Specializing in Intelligence and Big Data" fact line. The other two fact lines (the university and Jukeplox) are still mine: check them.
+- [x] **Hero tagline.** Done: "Computer science student at UIUC."
 - [ ] **Skills.** Three cards in the Skills section: adjust the blurbs and tags to what you actually use.
-- [ ] **Project 1, "Illini Course Planner", and project 2, "Prairie Roasters".** Both are invented stand-ins for your two website projects. For each one, update the carousel slide (title, kind, summary, tags, image `alt`), the matching `dialog` near the bottom of the file (description, bullet points, link `href`), and replace `src/assets/project-site-1.svg` / `project-site-2.svg` with a screenshot. If you use a `.png` or `.jpg` screenshot, change the `src` in the slide to match.
-- [ ] **Project 3, Jukeplox.** The link already points at `https://github.com/DJRkod/jukeplox`. Check the description and bullets against the real project.
-- [ ] **Reel.** Replace `src/assets/reel.mp4` with your own clip, keeping the file name. There is no ffmpeg on this machine, so the clip must already be H.264/AAC `.mp4`, short, and small: aim for under 10 MB (GitHub rejects files over 100 MB). To regenerate the placeholder instead, run `python scripts/make_placeholder_reel.py`.
+- [x] **Projects 1 and 2.** Done: Rock, Paper, Cheater (`https://rockpapercheater.com`) and Mowkoban (`https://mowkoban.com`), with screenshots of the live sites. The descriptions were written from what the sites show publicly: check them, especially the tags, since I could not see how either site is built. Mowkoban's modal credits Roger Burt alongside you and mentions The Pudding, as the site's own About page does.
+- [ ] **Project 3, Jukeplox.** The image is now a real screenshot of a running deployment (Artists, tiles view, Bloody Pink scheme). The link points at `https://github.com/DJRkod/jukeplox`. The description and bullets are still my wording from the repo's one-line summary: check them against the real project.
+- [x] **Reel.** `src/assets/reel.mp4` is real footage of the three projects (30 s, 960x540, H.264, no audio, 9.9 MB). `node scripts/reel/capture.mjs` records them in headless Chrome: three rounds of Rock, Paper, Cheater with no score submitted, the unscored Mowkoban tutorial, and Jukeplox browsed without queueing or playing anything. `python scripts/reel/compose.py` then edits the frames into the clip with OpenCV, since there is no ffmpeg on this machine. Watch it once and check the captions. If you swap in your own clip, keep the file name and keep it small (GitHub rejects files over 100 MB).
 - [ ] After any change: `npm run build` must succeed, and `npm start` should look right at 1920x1080, 1366x768, 1280x720, 1024x768, and 768x1024.
 
 ## 2. Deploy
 
 - [ ] Commit and push to `main`.
 - [ ] On GitHub: **Settings > Pages > Build and deployment > Source > GitHub Actions**. Until this is set, the workflow's build job passes and its deploy job fails with a 404. That is expected.
-- [ ] Re-run the failed workflow (Actions tab) or push again, then open `https://djrkod.github.io/cs409-mp1` and check that the hero background, icons, fonts, project images, and the video all load.
-- [ ] **Decide about the repo name.** The README says to name the repo `mp1`, which would make the URL `https://djrkod.github.io/mp1`. Yours is `cs409-mp1`. Renaming it (Settings > General) needs no code change because every asset path is relative. If you rename, update your local remote with `git remote set-url origin https://github.com/DJRkod/mp1.git`.
+- [ ] Re-run the failed workflow (Actions tab) or push again, then open `https://djrkod.github.io/mp1` and check that the hero background, icons, fonts, project images, and the video all load.
+- [x] **Repo name.** Renamed from `cs409-mp1` to `mp1` on Sep 21, as the README asks, and the local remote now points at `https://github.com/DJRkod/mp1.git`. No code change was needed because every asset path is relative. The site will be at `https://djrkod.github.io/mp1`.
 
 ## 3. Demo video (3 minutes maximum)
 
@@ -70,7 +70,9 @@ Third-party resources loaded by the page:
 - **Font Awesome Free 6.5.1**, loaded as a stylesheet from cdnjs (`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css`). Icons: CC BY 4.0. Fonts: SIL OFL 1.1. Code: MIT. The assignment names FontAwesome in requirement 15.
 - **Inter** and **JetBrains Mono**, loaded from Google Fonts. Both are SIL Open Font License 1.1.
 
-Everything else is original to this repo: the SVG artwork in `src/assets/`, and the reel, which `scripts/make_placeholder_reel.py` renders with OpenCV. Build tooling (webpack, Babel, Sass, and the rest of `package.json`) came with the course template.
+The Jukeplox screenshot shows artist photos and a few album covers from the music library it was browsing. Those images belong to their respective artists and labels and appear only incidentally, as part of a screenshot of your own app; mention that if the form asks about third-party images.
+
+Everything else is yours or original to this repo: your portrait, screenshots of your own two game sites, the SVG artwork in `src/assets/`, and the reel, which `scripts/reel/` records from your own three projects and edits with OpenCV. Like the Jukeplox screenshot, the Jukeplox part of the reel shows artist photos and album covers from the music library incidentally. Build tooling (webpack, Babel, Sass, and the rest of `package.json`) came with the course template.
 
 ## Worth asking on Piazza (rule 7)
 

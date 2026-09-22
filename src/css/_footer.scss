@@ -4,14 +4,17 @@
 // The last stripe is deliberately shorter than the window. The position
 // indicator reaches it through the bottom-of-page rule in js/navbar.js.
 .footer {
-  padding-block: space(8) space(6);
+  padding-block: space(8) space(4);
   border-top: 1px solid color('border');
   background-color: color('bg');
   text-align: center;
   scroll-margin-top: var(--nav-h-small);
 
-  &__note {
-    margin-top: space(6);
+  // A slim closing bar across the full width, under the contact links.
+  &__copyright {
+    margin-top: space(7);
+    padding-top: space(4);
+    border-top: 1px solid color('border');
     font-family: font('mono');
     font-size: type('xs');
     color: color('text-muted');

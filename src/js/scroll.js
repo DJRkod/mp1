@@ -7,6 +7,8 @@ import { scrollTargetY, scrollDuration, easeInOutCubic } from './lib/geometry.js
 
 const INTERRUPT_EVENTS = ['wheel', 'touchstart', 'keydown'];
 const SCROLL_KEYS = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+// With reduced motion requested, the trip is still animated, but kept brief.
+const REDUCED_MOTION_MS = 150;
 
 export function initSmoothScroll() {
   const links = Array.from(document.querySelectorAll('[data-scroll]'));
@@ -46,12 +48,11 @@ export function initSmoothScroll() {
     const endY = scrollTargetY(sectionTop, smallNavHeight(), maxScroll);
     const distance = endY - startY;
 
-    if (reducedMotion.matches || distance === 0) {
-      window.scrollTo(0, endY);
+    if (distance === 0) {
       return;
     }
 
-    const duration = scrollDuration(distance);
+    const duration = reducedMotion.matches ? REDUCED_MOTION_MS : scrollDuration(distance);
     const startTime = performance.now();
 
     const step = (now) => {

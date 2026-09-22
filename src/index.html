@@ -37,7 +37,7 @@
                 <div class="hero__content">
                     <p class="hero__eyebrow">&gt; hello, world</p>
                     <h1 class="hero__title">Raymond Burt</h1>
-                    <p class="hero__tagline">Computer science student at Illinois. I build for the web, tinker with self-hosted tools, and like making messy data make sense.</p>
+                    <p class="hero__tagline">Computer science student at UIUC.</p>
                     <a class="btn" href="#projects" data-scroll>View my projects <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                 </div>
                 <a class="hero__cue" href="#about" data-scroll aria-label="Scroll to About">
@@ -53,13 +53,11 @@
                         <h2 class="section-head__title">A little about me</h2>
                     </header>
                     <div class="about">
-                        <img class="about__photo" src="assets/avatar.svg" alt="Portrait of Raymond Burt" width="400" height="400">
+                        <img class="about__photo" src="assets/profile.jpg" alt="Portrait of Raymond Burt" width="300" height="300">
                         <div class="about__bio">
-                            <p>I'm a computer science student at the University of Illinois Urbana-Champaign. I like building things people can actually use: web pages that feel good at any screen size, small services I can host myself, and tools that turn a pile of data into something readable.</p>
-                            <p>Recent coursework has taken me through web programming and text information systems, where my group fine-tuned BERT models for a retrieval project. Outside of class I maintain Jukeplox, a self-hosted party jukebox for Plex.</p>
-                            <p>When I'm not at a keyboard I'm usually hunting for good coffee or arguing about what should be next in the queue.</p>
+                            <p>I like messing with natural language processing and AI, cooking, as well as playing guitar and then chopping it up and layering it on a computer. For fun, I run Dungeons&nbsp;&amp;&nbsp;Dragons two or three times a week.</p>
                             <ul class="about__facts">
-                                <li><i class="fa-solid fa-laptop-code" aria-hidden="true"></i> Currently in CS 409, The Art of Web Programming</li>
+                                <li><i class="fa-solid fa-brain" aria-hidden="true"></i> Specializing in Intelligence and Big Data</li>
                                 <li><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> University of Illinois Urbana-Champaign</li>
                                 <li><i class="fa-solid fa-music" aria-hidden="true"></i> Maintainer of Jukeplox</li>
                             </ul>
@@ -74,13 +72,12 @@
                     <header class="section-head">
                         <p class="section-head__label">02 / skills</p>
                         <h2 class="section-head__title">What I work with</h2>
-                        <p class="section-head__lead">Three areas I keep coming back to, and the tools I reach for in each.</p>
                     </header>
                     <ul class="skills">
                         <li class="skill-card">
                             <span class="skill-card__icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
                             <h3 class="skill-card__title">Frontend</h3>
-                            <p class="skill-card__text">Semantic, responsive pages written by hand, without reaching for a framework first.</p>
+                            <p class="skill-card__text">Visual appeal, quirky feel.</p>
                             <ul class="tag-list">
                                 <li>HTML5</li>
                                 <li>SCSS</li>
@@ -91,7 +88,7 @@
                         <li class="skill-card">
                             <span class="skill-card__icon"><i class="fa-solid fa-server" aria-hidden="true"></i></span>
                             <h3 class="skill-card__title">Backend</h3>
-                            <p class="skill-card__text">Small, dependable services and the plumbing that keeps them running at home.</p>
+                            <p class="skill-card__text">Databases and dependable systems.</p>
                             <ul class="tag-list">
                                 <li>Python</li>
                                 <li>Node.js</li>
@@ -102,7 +99,7 @@
                         <li class="skill-card">
                             <span class="skill-card__icon"><i class="fa-solid fa-brain" aria-hidden="true"></i></span>
                             <h3 class="skill-card__title">Data &amp; ML</h3>
-                            <p class="skill-card__text">Text retrieval, model fine-tuning, and notebooks that explain themselves.</p>
+                            <p class="skill-card__text">Text retrieval, model fine-tuning, and natural language processing.</p>
                             <ul class="tag-list">
                                 <li>Jupyter</li>
                                 <li>BERT</li>
@@ -120,9 +117,8 @@
                     <header class="section-head">
                         <p class="section-head__label">03 / projects</p>
                         <h2 class="section-head__title">Things I've built</h2>
-                        <p class="section-head__lead">Use the arrows to browse, and open any project for the details.</p>
                     </header>
-                    <div class="carousel" data-carousel aria-roledescription="carousel" aria-label="Projects">
+                    <div class="carousel" data-carousel role="group" aria-roledescription="carousel" aria-label="Projects">
                         <button class="carousel__arrow" type="button" data-carousel-prev aria-label="Previous project">
                             <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                         </button>
@@ -130,39 +126,39 @@
                             <ul class="carousel__track" data-carousel-track>
                                 <li class="carousel__slide" data-carousel-slide aria-roledescription="slide" aria-label="1 of 3">
                                     <article class="project-card">
-                                        <img class="project-card__visual" src="assets/project-site-1.svg" alt="Dashboard of the Illini Course Planner web app" width="800" height="500">
+                                        <img class="project-card__visual" src="assets/project-rockpapercheater.jpg" alt="Title screen of Rock, Paper, Cheater with a cheat-rate slider set to 50 percent" width="800" height="500">
                                         <div class="project-card__body">
-                                            <p class="project-card__kind">Web app</p>
-                                            <h3 class="project-card__title">Illini Course Planner</h3>
-                                            <p class="project-card__summary">Drag courses into semesters and see credit load and prerequisites update as you go.</p>
+                                            <p class="project-card__kind">Web game</p>
+                                            <h3 class="project-card__title">Rock, Paper, Cheater</h3>
+                                            <p class="project-card__summary">Rock-paper-scissors against a computer that cheats at the rate you choose. Catch it in the act, or lose the whole match trying.</p>
                                             <ul class="tag-list">
                                                 <li>JavaScript</li>
-                                                <li>SCSS</li>
-                                                <li>Node.js</li>
+                                                <li>Game design</li>
+                                                <li>Leaderboard</li>
                                             </ul>
-                                            <button class="btn" type="button" data-modal-open="modal-planner">Details <i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></button>
+                                            <button class="btn" type="button" data-modal-open="modal-rockpapercheater">Details <i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></button>
                                         </div>
                                     </article>
                                 </li>
                                 <li class="carousel__slide" data-carousel-slide aria-roledescription="slide" aria-label="2 of 3">
                                     <article class="project-card">
-                                        <img class="project-card__visual" src="assets/project-site-2.svg" alt="Landing page of the Prairie Roasters website" width="800" height="500">
+                                        <img class="project-card__visual" src="assets/project-mowkoban.jpg" alt="Mowkoban tutorial board: a pixel-art lawn with a red mower, a rock, and patches of tall grass" width="800" height="500">
                                         <div class="project-card__body">
-                                            <p class="project-card__kind">Website</p>
-                                            <h3 class="project-card__title">Prairie Roasters</h3>
-                                            <p class="project-card__summary">A fast, single-page site for a local coffee roaster, with a menu that the owners can edit themselves.</p>
+                                            <p class="project-card__kind">Daily puzzle</p>
+                                            <h3 class="project-card__title">Mowkoban</h3>
+                                            <p class="project-card__summary">A daily lawn-mowing puzzle: one board a day, one scored attempt. Mow the whole lawn in as few moves as you can.</p>
                                             <ul class="tag-list">
-                                                <li>HTML5</li>
-                                                <li>SCSS</li>
-                                                <li>Accessibility</li>
+                                                <li>JavaScript</li>
+                                                <li>Puzzle design</li>
+                                                <li>Pixel art</li>
                                             </ul>
-                                            <button class="btn" type="button" data-modal-open="modal-roasters">Details <i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></button>
+                                            <button class="btn" type="button" data-modal-open="modal-mowkoban">Details <i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></button>
                                         </div>
                                     </article>
                                 </li>
                                 <li class="carousel__slide" data-carousel-slide aria-roledescription="slide" aria-label="3 of 3">
                                     <article class="project-card">
-                                        <img class="project-card__visual" src="assets/project-jukeplox.svg" alt="Terminal showing the Jukeplox server starting up" width="800" height="500">
+                                        <img class="project-card__visual" src="assets/project-jukeplox.jpg" alt="Jukeplox in its Bloody Pink color scheme: a grid of round artist portraits beside the now-playing panel and queue" width="1280" height="800">
                                         <div class="project-card__body">
                                             <p class="project-card__kind">Open source</p>
                                             <h3 class="project-card__title">Jukeplox</h3>
@@ -181,7 +177,7 @@
                         <button class="carousel__arrow" type="button" data-carousel-next aria-label="Next project">
                             <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                         </button>
-                        <p class="carousel__status" data-carousel-status aria-live="polite">Slide 1 of 3</p>
+                        <p class="sr-only" data-carousel-status aria-live="polite">Slide 1 of 3</p>
                     </div>
                 </div>
             </section>
@@ -192,7 +188,6 @@
                     <header class="section-head">
                         <p class="section-head__label">04 / reel</p>
                         <h2 class="section-head__title">A quick look</h2>
-                        <p class="section-head__lead">A short reel of recent work. Press play.</p>
                     </header>
                     <video class="reel" controls playsinline preload="metadata" poster="assets/reel-poster.svg" width="1280" height="720">
                         <source src="assets/reel.mp4" type="video/mp4">
@@ -205,11 +200,11 @@
         <!-- Contact footer with social icons -->
         <footer class="footer" id="contact">
             <div class="container">
-                <header class="section-head">
+                <div class="section-head">
                     <p class="section-head__label">05 / contact</p>
                     <h2 class="section-head__title">Let's talk</h2>
                     <p class="section-head__lead">The best way to reach me is through one of these.</p>
-                </header>
+                </div>
                 <ul class="social">
                     <li>
                         <a class="social__link" href="https://github.com/DJRkod" target="_blank" rel="noopener" aria-label="Raymond Burt on GitHub">
@@ -221,43 +216,49 @@
                             <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
                         </a>
                     </li>
+                    <li>
+                        <a class="social__link" href="https://raymondburt.hashnode.dev/" target="_blank" rel="noopener" aria-label="Raymond Burt's blog on Hashnode">
+                            <i class="fa-brands fa-hashnode" aria-hidden="true"></i>
+                        </a>
+                    </li>
                 </ul>
-                <p class="footer__note">Designed and hand-coded by Raymond Burt. No frameworks were harmed.</p>
             </div>
+            <p class="footer__copyright">Copyright Raymond Burt</p>
         </footer>
 
         <!-- Project detail modals -->
-        <dialog class="modal" id="modal-planner" aria-labelledby="modal-planner-title">
+        <dialog class="modal" id="modal-rockpapercheater" aria-labelledby="modal-rockpapercheater-title">
             <div class="modal__panel">
                 <button class="modal__close" type="button" data-modal-close aria-label="Close project details">
                     <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                 </button>
-                <p class="modal__kind">Web app</p>
-                <h3 class="modal__title" id="modal-planner-title">Illini Course Planner</h3>
-                <p>Planning four years of courses in a spreadsheet gets old quickly. The planner lets you drag courses between semesters and immediately see what that does to your credit load and which prerequisites you have just broken.</p>
+                <p class="modal__kind">Web game</p>
+                <h3 class="modal__title" id="modal-rockpapercheater-title">Rock, Paper, Cheater</h3>
+                <p>Rock-paper-scissors, except the computer cheats, and you decide how often. Every round you can play it straight or accuse your opponent of cheating. Call it right and you catch it; call it wrong and the match is gone.</p>
                 <ul class="modal__list">
-                    <li>Drag-and-drop schedule built on plain DOM events</li>
-                    <li>Prerequisite checks that explain what is missing, not just that something is</li>
-                    <li>Plans saved locally, so there is nothing to sign up for</li>
+                    <li>A cheat-rate slider and best-of-3 to best-of-9 matches, or any length up to 99 rounds</li>
+                    <li>Tournament mode, a running points total, and a shared leaderboard</li>
+                    <li>Six hand-drawn visual themes, including a dark mode, and sound you can mute</li>
                 </ul>
-                <a class="btn" href="https://github.com/DJRkod" target="_blank" rel="noopener">Visit the site <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                <a class="btn" href="https://rockpapercheater.com" target="_blank" rel="noopener">Play it <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
             </div>
         </dialog>
 
-        <dialog class="modal" id="modal-roasters" aria-labelledby="modal-roasters-title">
+        <dialog class="modal" id="modal-mowkoban" aria-labelledby="modal-mowkoban-title">
             <div class="modal__panel">
                 <button class="modal__close" type="button" data-modal-close aria-label="Close project details">
                     <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                 </button>
-                <p class="modal__kind">Website</p>
-                <h3 class="modal__title" id="modal-roasters-title">Prairie Roasters</h3>
-                <p>A single-page site for a small coffee roaster. The brief was simple: load fast on a phone in the shop, look like the bags on the shelf, and let the owners change the menu without calling me.</p>
+                <p class="modal__kind">Daily puzzle</p>
+                <h3 class="modal__title" id="modal-mowkoban-title">Mowkoban</h3>
+                <p>A Sokoban-flavored daily puzzle about mowing a lawn as efficiently as possible. Everyone gets the same board, a new one arrives at midnight Central, and you get one scored attempt at it.</p>
                 <ul class="modal__list">
-                    <li>Hand-written, responsive layout with no CSS framework</li>
-                    <li>Menu content kept in one easy-to-edit file</li>
-                    <li>Keyboard and screen-reader friendly from the first draft</li>
+                    <li>Regular grass takes one pass, tall grass takes two, and rocks and fences block the way</li>
+                    <li>Play with arrow keys, WASD, taps, or swipes, with undo and an unscored tutorial</li>
+                    <li>Stats, an archive of past boards, accounts, and a leaderboard</li>
                 </ul>
-                <a class="btn" href="https://github.com/DJRkod" target="_blank" rel="noopener">Visit the site <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                <p>Art and code by Roger Burt and Raymond Burt, inspired by a piece from The Pudding.</p>
+                <a class="btn" href="https://mowkoban.com" target="_blank" rel="noopener">Play today's puzzle <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
             </div>
         </dialog>
 

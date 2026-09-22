@@ -19,7 +19,8 @@
 // About: photo beside bio on wide windows, stacked and centered below 900px.
 .about {
   display: grid;
-  grid-template-columns: minmax(220px, 320px) 1fr;
+  // The portrait is 300px square; the column never scales it past that.
+  grid-template-columns: minmax(220px, 300px) 1fr;
   align-items: center;
   gap: space(7);
 
@@ -124,7 +125,9 @@
 
 .reel {
   width: 100%;
-  max-width: 880px;
+  // Sized from the window height as well, so the whole player, controls
+  // included, fits under the navbar on short windows such as 1280x720.
+  max-width: clamp(320px, calc((100vh - 340px) * 16 / 9), 880px);
   height: auto;
   margin-inline: auto;
   aspect-ratio: 16 / 9;

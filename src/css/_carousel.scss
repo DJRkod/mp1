@@ -51,14 +51,6 @@ $carousel-max-slides: 6;
     }
   }
 
-  &__status {
-    grid-column: 1 / -1;
-    text-align: center;
-    font-family: font('mono');
-    font-size: type('sm');
-    color: color('text-muted');
-  }
-
   @include below($bp-narrow) {
     gap: space(2);
 

@@ -146,12 +146,14 @@ button {
   white-space: nowrap;
 }
 
+// Reduced motion keeps every movement brief and stops anything that loops,
+// instead of removing motion outright: the navbar still visibly resizes.
 @include reduced-motion {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: 150ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 150ms !important;
   }
 }
